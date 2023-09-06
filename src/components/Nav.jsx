@@ -48,9 +48,14 @@ const Nav = ({ handleFilter, handleSearch }) => {
     handleFilter(name, type, color, isBaby, weight_gt, weight_lt)
   }
 
-  const closeNav = (e) => {
+  const showNav = () => {
+    setDisplayNav(true)
+  }
+
+  const removeFilters = (e) => {
     e.preventDefault()
-    setDisplayNav(!displayNav)
+    setDisplayNav(false)
+    handleSearch("", "", "", false, 0, 1000)
   } 
 
   return (
@@ -59,10 +64,10 @@ const Nav = ({ handleFilter, handleSearch }) => {
         <input id="searchBar" value={name} type="text" placeholder="Search" className="w-full  h-7 bg-white p-1 border focus:outline-none" onChange={(e) => setName(e.target.value)} />
         <button type="submit" className="px-1 border-none text-lg" onClick={handleSubmit()}><AiOutlineSearch /></button>
       </form>
-      {!displayNav && <button onClick={closeNav}><MdUnfoldMore/></button>}
+      {!displayNav && <button onClick={showNav}><MdUnfoldMore/></button>}
       {displayNav && 
       <div className='flex flex-col md:flex-row md:gap-4 items-center justify-center border border-slate-300 text-xs'>
-        <button onClick={closeNav} className='p-2 text-lg'><AiOutlineCloseCircle /></button>
+        <button onClick={removeFilters} className='p-2 text-lg'><AiOutlineCloseCircle /></button>
         <div className="flex flex-col md:flex-row justify-center gap-2 p-1 items-center">
             <div className='flex gap-2'>
               <p>Type</p>
