@@ -3,8 +3,8 @@ import { AiOutlineSearch, AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdUnfoldMore } from 'react-icons/md'
 import { gql, useQuery } from '@apollo/client'
 import MultiRangeSlider from './multiRangeSlider/MultiRangeSlider'
+import { getFilters } from '../utils/getFilters'
 import PropTypes from 'prop-types'
-
 
 const queryTypes = gql`
 query {
@@ -23,10 +23,12 @@ query {
 
 const Nav = ({ handleFilter, handleSearch }) => {
 
-  const [type, setType] = useState('')
-  const [color, setColor] = useState('')
-  const [isBaby, setIsBaby] = useState(false)
-  const [name, setName] = useState('')
+  const filters = getFilters()
+
+  const [type, setType] = useState(filters.type || '')
+  const [color, setColor] = useState(filters.color || '')
+  const [isBaby, setIsBaby] = useState(filters.isBaby || false)
+  const [name, setName] = useState(filters.name || '')
   const [weight_gt, setWeight_gt] = useState(0)
   const [weight_lt, setWeight_lt] = useState(1000)
 
@@ -62,22 +64,24 @@ const Nav = ({ handleFilter, handleSearch }) => {
       <div className='flex flex-col md:flex-row md:gap-4 items-center justify-center border border-slate-300 text-xs'>
         <button onClick={closeNav} className='p-2 text-lg'><AiOutlineCloseCircle /></button>
         <div className="flex flex-col md:flex-row justify-center gap-2 p-1 items-center">
-          <p>Type</p>
-          <select name="" id="" selected={type} className='bg-white px-1 border border-slate-500' onChange={(e) => { setType(e.target.value) }}>
-            <option value="">All</option>
-            {types?.pokemon_v2_type?.map((type, index) => (
-              <option key={index} value={type.name}>{type.name.toUpperCase()}</option>
-            ))}
-          </select>
-          <p>Color</p>
-          <select name="" selected={color} id="" className='bg-white px-1 border border-slate-500' onChange={(e) => { setColor(e.target.value) }}>
-            <option value="">All</option>
-            {colors?.pokemon_v2_pokemoncolor?.map((color, index) => (
-              <option key={index} value={color.name}>{color.name.toUpperCase()}</option>
-            ))}
-          </select>
+            <div className='flex gap-2'>
+              <p>Type</p>
+              <select name="" id="" defaultValue={filters.type} className='bg-white px-1 border border-slate-500' onChange={(e) => { setType(e.target.value) }}>
+                <option value="">All</option>
+                {types?.pokemon_v2_type?.map((type, index) => (
+                  <option key={index} value={type.name}>{type.name.toUpperCase()}</option>
+                ))}
+              </select>
+              <p>Color</p>
+              <select name="" defaultValue={color} id="" className='bg-white px-1 border border-slate-500' onChange={(e) => { setColor(e.target.value) }}>
+                <option value="">All</option>
+                {colors?.pokemon_v2_pokemoncolor?.map((color, index) => (
+                  <option key={index} value={color.name}>{color.name.toUpperCase()}</option>
+                ))}
+              </select>
+            </div>
           <div className='flex items-center gap-1'>
-            <input type="checkbox" checked={isBaby} onChange={(e) => setIsBaby(e.target.checked)} /> Baby
+            <input type="checkbox" defaultChecked={filters.isBaby} onChange={(e) => setIsBaby(e.target.checked)} /> Baby
           </div>
           <div className='flex md:flex-row flex-col items-center gap-1'>
             <p>Weight</p>
@@ -86,7 +90,9 @@ const Nav = ({ handleFilter, handleSearch }) => {
               max={1000}
               onChange={({ min, max }) => { setWeight_gt(min), setWeight_lt(max) }}
             />
+            <p>current: {filters.weight_gt} - {filters.weight_lt}</p>
           </div>
+
         </div>
         <div className='flex items-center gap-1'>
           <button onClick={applyFilters} className='bg-white p-2 px-3 border border-slate-500 h-full text-md font-semibold'> Find </button>

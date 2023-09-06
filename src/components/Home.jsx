@@ -4,6 +4,8 @@ import PokemonList from './PokemonList'
 import { Oval } from 'react-loader-spinner'
 import { gql, useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
+import { useContext } from 'react'
+import { FilterContext } from '../contexts/FilterContext'
 
 const queryWithFilters = gql`
 query findBaby($name: String, $type: String, $isBaby: Boolean, $weight_gt: Int, $weight_lt: Int, $limit: Int, $offset: Int, $color: String) {
@@ -23,7 +25,8 @@ const Home = () => {
   const LIMIT = 18
   const { numpage } = useParams()
 
-  const [filters, setFilters] = useState({name: "", type: "", color: "", isBaby: false, weight_gt: 0, weight_lt: 1000})
+  const { filters, setFilters } = useContext(FilterContext);
+
   const [ page, setPage ] = useState(numpage ? parseInt(numpage) : 0)
 
   const { data, loading } = useQuery(queryWithFilters, {
