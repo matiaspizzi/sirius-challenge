@@ -23,7 +23,7 @@ const Home = () => {
   const LIMIT = 18
   const { numpage } = useParams()
 
-  const [filters, setFilters] = useState({name: "", type: "", color: "", isBaby: false, weight_gt: 0, weight_lt: 100})
+  const [filters, setFilters] = useState({name: "", type: "", color: "", isBaby: false, weight_gt: 0, weight_lt: 1000})
   const [ page, setPage ] = useState(numpage ? parseInt(numpage) : 0)
 
   const { data, loading } = useQuery(queryWithFilters, {
@@ -32,12 +32,12 @@ const Home = () => {
 
   const handleSearch = (name) => {
     setPage(0)
-    setFilters({...filters, name: name})
+    setFilters({name, type: "", color: "", isBaby: false, weight_gt: 0, weight_lt: 1000})
   }
 
   const handleFilter = (name, type, color, isBaby, weight_gt, weight_lt) => {
     setPage(0)
-    setFilters({...filters, name: name, type: type, color: color, isBaby: isBaby, weight_gt: weight_gt, weight_lt: weight_lt})
+    setFilters({ name, type, color, isBaby, weight_gt, weight_lt})
   }
 
   const nextPage = () => {

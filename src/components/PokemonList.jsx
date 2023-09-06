@@ -13,7 +13,7 @@ const PokemonList = ({ pokemons, prevPage, nextPage, page }) => {
               <Link to={`/pokemon/${pokemon.id}`} key={index}>
                 <div key={index} className="flex flex-col items-center justify-center p-2 shadow-md bg-white m-2 h-[130px] w-[130px] hover:scale-110 ease-in duration-100">
                   <h3 className="text-sm font-medium">{pokemon.name.toUpperCase()}</h3>
-                  <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`} className="w-[100px]" />
+                  <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`} className="w-[100px]" alt={pokemon.name}/>
                 </div>
               </Link>
             ))}

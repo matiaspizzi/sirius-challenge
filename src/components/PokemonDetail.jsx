@@ -47,7 +47,7 @@ const PokemonDetail = () => {
           </div>
           <div className="flex flex-col md:flex-row justify-center items-center gap-3 md:gap-20 p-2 bg-white m-2 ">
 
-            <div>
+            <div className="flex flex-col justify-center items-center gap-2">
               <p className="text-md font-medium">Type</p>
               <div className='flex gap-2 text-xs text-left justify-between'>
                 {data?.pokemon_v2_pokemon[0].pokemon_v2_pokemontypes.map((stat, index) => (
@@ -55,6 +55,8 @@ const PokemonDetail = () => {
                     <p>{stat.pokemon_v2_type.name.toUpperCase()}</p>
                   </div>))}
               </div>
+              <p className="text-md font-medium">Weight</p>
+              <p className='flex gap-2 text-xs text-left justify-between'>{data?.pokemon_v2_pokemon[0].weight} kg</p>
             </div>
 
             <div className='flex flex-col gap-4'>
