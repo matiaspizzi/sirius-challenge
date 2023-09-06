@@ -30,8 +30,9 @@ const PokemonList = ({ pokemons, loaderNextPage, prevPage, nextPage, page }) => 
                 </Link>
               ))}
             </div>
-            <div className="h-20 flex justify-center items-center">
-            </div>
+            { pokemons.length === 0 && <div className="h-20 flex justify-center items-center">
+              <p className="bg-white p-4 text-xl rounded-sm shadow-sm">No Pokemons Found</p>
+            </div>}
           </div>
         </div>}
     </>
