@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineSearch, AiOutlineCloseCircle } from 'react-icons/ai'
+import { MdUnfoldMore } from 'react-icons/md'
 import { gql, useQuery } from '@apollo/client'
 import MultiRangeSlider from './multiRangeSlider/MultiRangeSlider'
 import PropTypes from 'prop-types'
@@ -29,6 +30,8 @@ const Nav = ({ handleFilter, handleSearch }) => {
   const [weight_gt, setWeight_gt] = useState(0)
   const [weight_lt, setWeight_lt] = useState(1000)
 
+  const [displayNav, setDisplayNav] = useState(true)
+
   const { data: types } = useQuery(queryTypes) // Para los selects
   const { data: colors } = useQuery(queryColor) // Para los selects
 
@@ -43,14 +46,22 @@ const Nav = ({ handleFilter, handleSearch }) => {
     handleFilter(name, type, color, isBaby, weight_gt, weight_lt)
   }
 
+  const closeNav = (e) => {
+    e.preventDefault()
+    setDisplayNav(!displayNav)
+  } 
+
   return (
-    <div className="flex flex-col w-full items-center gap-3 p-3 justify-center shadow-md bg-white text-black h-full">
+    <div className="flex flex-col w-full items-center gap-2 p-3 justify-center shadow-md bg-white text-black h-full">
       <form className="w-full md:max-w-[70vw] flex justify-center border border-gray-700 align-middle">
         <input id="searchBar" value={name} type="text" placeholder="Search" className="w-full  h-7 bg-white p-1 border focus:outline-none" onChange={(e) => setName(e.target.value)} />
         <button type="submit" className="px-1 border-none text-lg" onClick={handleSubmit()}><AiOutlineSearch /></button>
       </form>
-      <div className='flex gap-4 border border-slate-300 text-xs'>
-        <div className="flex justify-center gap-2 p-1 items-center">
+      {!displayNav && <button onClick={closeNav}><MdUnfoldMore/></button>}
+      {displayNav && 
+      <div className='flex flex-col md:flex-row md:gap-4 items-center justify-center border border-slate-300 text-xs'>
+        <button onClick={closeNav} className='p-2 text-lg'><AiOutlineCloseCircle /></button>
+        <div className="flex flex-col md:flex-row justify-center gap-2 p-1 items-center">
           <p>Type</p>
           <select name="" id="" selected={type} className='bg-white px-1 border border-slate-500' onChange={(e) => { setType(e.target.value) }}>
             <option value="">All</option>
@@ -68,7 +79,7 @@ const Nav = ({ handleFilter, handleSearch }) => {
           <div className='flex items-center gap-1'>
             <input type="checkbox" checked={isBaby} onChange={(e) => setIsBaby(e.target.checked)} /> Baby
           </div>
-          <div className='flex items-center gap-1'>
+          <div className='flex md:flex-row flex-col items-center gap-1'>
             <p>Weight</p>
             <MultiRangeSlider
               min={0}
@@ -78,9 +89,10 @@ const Nav = ({ handleFilter, handleSearch }) => {
           </div>
         </div>
         <div className='flex items-center gap-1'>
-          <button onClick={applyFilters} className='bg-white px-1 border border-slate-500 h-full text-md font-semibold'> Find </button>
+          <button onClick={applyFilters} className='bg-white p-2 px-3 border border-slate-500 h-full text-md font-semibold'> Find </button>
         </div>
-      </div>
+      </div>}
+      
     </div>
   )
 }

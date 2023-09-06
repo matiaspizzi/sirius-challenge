@@ -20,7 +20,7 @@ query findBaby($name: String, $type: String, $isBaby: Boolean, $weight_gt: Int, 
 
 const Home = () => {
 
-  const LIMIT = 8
+  const LIMIT = 18
   const { numpage } = useParams()
 
   const [filters, setFilters] = useState({name: "", type: "", color: "", isBaby: false, weight_gt: 0, weight_lt: 100})
