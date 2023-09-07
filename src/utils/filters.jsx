@@ -7,4 +7,8 @@ const getFilters = () => {
     }
 }
 
-export { getFilters };
+const storeFilters = (filters) => {
+    localStorage.setItem('filters', JSON.stringify(filters));
+}
+
+export { getFilters, storeFilters };

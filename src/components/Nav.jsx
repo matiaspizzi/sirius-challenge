@@ -3,8 +3,6 @@ import { AiOutlineSearch, AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdUnfoldMore } from 'react-icons/md'
 import { gql, useQuery } from '@apollo/client'
 import MultiRangeSlider from './multiRangeSlider/MultiRangeSlider'
-import { useContext } from 'react'
-import { FilterContext } from '../contexts/FilterContext'
 import PropTypes from 'prop-types'
 
 const queryTypes = gql`
@@ -21,10 +19,7 @@ query {
   }
 }`
 
-
-const Nav = ({ handleFilter, handleSearch }) => {
-
-  const { filters } = useContext(FilterContext);
+const Nav = ({ handleFilter, handleSearch, filters }) => {
 
   const [type, setType] = useState(filters.type || '')
   const [color, setColor] = useState(filters.color || '')
@@ -111,7 +106,8 @@ const Nav = ({ handleFilter, handleSearch }) => {
 
 Nav.propTypes = {
   handleFilter: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired
+  handleSearch: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired
 }
 
 export default Nav

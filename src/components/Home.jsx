@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Nav from './Nav'
 import PokemonList from './PokemonList'
 import { Oval } from 'react-loader-spinner'
 import { gql, useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
-import { useContext } from 'react'
-import { FilterContext } from '../contexts/FilterContext'
+import { storeFilters, getFilters } from '../utils/filters'
 
 const queryWithFilters = gql`
 query findBaby($name: String, $type: String, $isBaby: Boolean, $weight_gt: Int, $weight_lt: Int, $limit: Int, $offset: Int, $color: String) {
@@ -23,15 +22,20 @@ query findBaby($name: String, $type: String, $isBaby: Boolean, $weight_gt: Int, 
 const Home = () => {
 
   const LIMIT = 18
+  
   const { numpage } = useParams()
 
-  const { filters, setFilters } = useContext(FilterContext);
-
+  const [filters, setFilters] = useState(getFilters() || {name: "", type: "", color: "", isBaby: false, weight_gt: 0, weight_lt: 1000})
   const [ page, setPage ] = useState(numpage ? parseInt(numpage) : 0)
 
-  const { data, loading } = useQuery(queryWithFilters, {
+  const { data, loading, error } = useQuery(queryWithFilters, {
     variables: {...filters, limit: LIMIT, offset: page * LIMIT}
   })
+
+  useEffect(() => {
+    storeFilters(filters);
+  }, [filters]);
+
 
   const handleSearch = (name) => {
     setPage(0)
@@ -51,10 +55,23 @@ const Home = () => {
     setPage((prev) => prev - 1)
   }
 
+  if(error) {
+    console.error(error)
+    return (
+      <>
+        <Nav handleFilter={handleFilter} handleSearch={handleSearch} filters={filters} setFilters={setFilters}/>
+        <div className='flex flex-col w-[100vw] min-h-[70vh] items-center justify-center'>
+          <h1 className="text-2xl text-red-700 bg-red-200 p-4 rounded-sm font-medium shadow-sm">Error</h1>
+          <p className='text-sm font-normal text-slate-600'>{error.message}</p>
+        </div>
+      </>
+    )
+  }
+
   if (loading) {
     return (
       <>
-        <Nav handleFilter={handleFilter} handleSearch={handleSearch} />
+        <Nav handleFilter={handleFilter} handleSearch={handleSearch} filters={filters} setFilters={setFilters}/>
         <div className='flex flex-col w-[100vw] min-h-[70vh] items-center justify-center'>
           <Oval height={80} color="red" secondaryColor="#ff4d4d" />
         </div>
